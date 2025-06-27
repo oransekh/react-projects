@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import team1 from "../assets/img/team1.jpg";
 import team2 from "../assets/img/team2.jpg";
 import team3 from "../assets/img/team3.jpg";
-import team4 from "../assets/img/team4.jpg";
-import team5 from "../assets/img/team5.jpg";
+import team4 from "../assets/img/team4.jpeg";
+import team5 from "../assets/img/team5.jpeg";
+import team6 from "../assets/img/team6.jpeg";
 import Megatestimonial from "./Megatestimonial";
 import { useEffect } from "react";
 
@@ -41,7 +42,7 @@ const testimonials = [
   {
     id: 6,
     name: "Jake Evans",
-    img: team3,
+    img: team6,
     p: "They exceeded my expectations! Everything was delivered on time and with great care.",
   },
 ];

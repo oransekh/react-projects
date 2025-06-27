@@ -1,111 +1,129 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { products } from "../product/productList";
 
-const Buycard = ({ isClicked }) => {
-  const [selectedImage, setSelectedImage] = useState(isClicked?.img || "");
+const Buycard = () => {
+  const { id } = useParams();
+  const product = products.find((p) => p.id === parseInt(id));
+
+  const [selectedImage, setSelectedImage] = useState(product?.img);
   const [quantity, setQuantity] = useState(1);
 
-  // Update main image if product changes
   useEffect(() => {
-    if (isClicked) {
-      setSelectedImage(isClicked.img);
-    }
-  }, [isClicked]);
+    window.scrollTo(0, 0);
+  }, []);
+
+  if (!product)
+    return <p className="text-center text-red-600">Product not found.</p>;
 
   return (
-    <div className="fixed inset-0 z-50  bg-opacity-60 overflow-auto">
-      {/* Close Button */}
-      <button
-        onClick={() => setIsClicked(false)}
-        className="absolute top-5 right-5 text-white bg-gray-800 hover:bg-gray-700 rounded-full p-2 z-50"
-      >
-        ✕
-      </button>
-
-      {/* Card Container */}
-      <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-start bg-white rounded-xl mt-16 shadow-lg">
-        {/* Thumbnail Gallery */}
-        <div className="flex md:flex-col gap-4 overflow-x-auto md:overflow-visible">
-          <img
-            src={isClicked.img}
-            alt="thumb"
-            onClick={() => setSelectedImage(isClicked.img)}
-            className="w-20 h-20 object-cover cursor-pointer rounded-md border hover:border-pink-500"
-          />
-          {/* Add more thumbnails if you have array */}
-        </div>
-
+    <div className="mx-auto max-w-7xl px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+      {/* Left: Main Image with Thumbnails overlay */}
+      <div className="relative w-full flex justify-center items-center rounded-xl p-4 shadow-xl bg-[#fff8f1]">
         {/* Main Product Image */}
-        <div className="relative w-full flex justify-center items-center">
-          <img
-            src={selectedImage}
-            alt="Main Product"
-            className="rounded-xl shadow-xl object-contain max-h-[450px]"
-          />
-          <div className="absolute top-4 right-4 bg-red-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
-            -{isClicked.discount}
-          </div>
+        <img
+          src={selectedImage}
+          alt="Main Product"
+          className="rounded-xl object-contain max-h-[550px] w-full"
+        />
+
+        {/* Discount Tag */}
+        <div className="absolute top-4 right-4 bg-red-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
+          -{product.discount}
         </div>
 
-        {/* Product Info */}
-        <div className="space-y-5">
-          <h2 className="text-3xl font-bold">{isClicked.name}</h2>
+        {/* Decorative Icons */}
+        <div className="absolute left-6 top-6 text-4xl opacity-20 select-none">
+          ✨
+        </div>
+        <div className="absolute bottom-6 left-6 text-4xl opacity-20 select-none">
+          💥
+        </div>
 
-          <div className="text-lg">
-            <span className="line-through text-gray-400 mr-2">
-              ₹{isClicked.originalPrice}
-            </span>
-            <span className="text-pink-600 font-bold text-2xl">
-              ₹{isClicked.discountedPrice}
-            </span>
-          </div>
+        {/* Responsive Thumbnails Overlay */}
+        <div
+          className="absolute -bottom-4 sm:-bottom-10 left-1/2 transform -translate-x-1/2 
+                lg:bottom-auto lg:top-1/2 lg:left-4 lg:-translate-y-1/2 
+                flex items-center justify-center lg:items-start lg:flex-col 
+                gap-3  p-2 rounded-md shadow-md"
+        >
+          {(product.thumbnails || [product.img]).map((thumb, i) => (
+            <img
+              key={i}
+              src={thumb}
+              alt={`thumb-${i}`}
+              onClick={() => setSelectedImage(thumb)}
+              className={`w-[80px] h-[80px] object-cover cursor-pointer rounded border ${
+                selectedImage === thumb
+                  ? "border-pink-600"
+                  : "hover:border-pink-500"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
 
-          <div className="text-yellow-500 flex items-center gap-1">
-            {"⭐".repeat(isClicked.rating)}{" "}
-            <span className="text-gray-600">(3 customer reviews)</span>
-          </div>
+      {/* Right: Product Details */}
+      <div className="space-y-5">
+        <h2 className="text-3xl font-bold">{product.name}</h2>
 
-          {/* Quantity + Buttons */}
-          <div className="flex gap-3 items-center">
-            <div className="flex border rounded">
-              <button
-                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="px-3 py-1"
-              >
-                -
-              </button>
-              <span className="px-4 py-1">{quantity}</span>
-              <button
-                onClick={() => setQuantity((q) => q + 1)}
-                className="px-3 py-1"
-              >
-                +
-              </button>
-            </div>
+        {/* Price */}
+        <div className="text-lg">
+          <span className="line-through text-gray-400 mr-2">
+            ₹{product.originalPrice}
+          </span>
+          <span className="text-pink-600 font-bold text-2xl">
+            ₹{product.discountedPrice}
+          </span>
+        </div>
 
-            <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-md font-semibold">
-              Add To Cart
+        {/* Rating */}
+        <div className="text-yellow-500 flex items-center gap-1">
+          {"⭐".repeat(product.rating)}
+          <span className="text-gray-600">(3 reviews)</span>
+        </div>
+
+        {/* Quantity and Buttons */}
+        <div className="flex gap-3 items-center">
+          <div className="flex border rounded">
+            <button
+              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+              className="px-3 py-1"
+            >
+              -
             </button>
-            <button className="bg-pink-600 hover:bg-pink-700 text-white px-5 py-2 rounded-md font-semibold">
-              Buy Now
+            <span className="px-4 py-1">{quantity}</span>
+            <button
+              onClick={() => setQuantity((q) => q + 1)}
+              className="px-3 py-1"
+            >
+              +
             </button>
           </div>
 
-          {/* Wishlist + Compare */}
-          <div className="flex gap-6 text-sm text-gray-600 mt-2">
-            <span className="cursor-pointer">↔ Add to compare</span>
-            <span className="cursor-pointer">♡ Add to wishlist</span>
-          </div>
+          <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-md font-semibold">
+            Add To Cart
+          </button>
+          <button className="bg-pink-600 hover:bg-pink-700 text-white px-5 py-2 rounded-md font-semibold">
+            Buy Now
+          </button>
+        </div>
 
-          {/* Payment Methods */}
-          <div className="mt-6">
-            <p className="font-semibold mb-2">Checkout securely with</p>
-            <div className="flex items-center gap-4">
-              <img src="/visa.png" alt="Visa" className="h-6" />
-              <img src="/mastercard.png" alt="Mastercard" className="h-6" />
-              <img src="/gpay.png" alt="GPay" className="h-6" />
-              <img src="/paytm.png" alt="Paytm" className="h-6" />
-              <span className="text-xs font-bold">CASH ON DELIVERY</span>
-            </div>
+        {/* Compare / Wishlist */}
+        <div className="flex gap-6 text-sm text-gray-600 mt-2">
+          <span className="cursor-pointer">↔ Add to compare</span>
+          <span className="cursor-pointer">♡ Add to wishlist</span>
+        </div>
+
+        {/* Payment Methods */}
+        <div className="mt-6">
+          <p className="font-semibold mb-2">Checkout securely with</p>
+          <div className="flex items-center gap-4">
+            <img src="/visa.png" alt="Visa" className="h-6" />
+            <img src="/mastercard.png" alt="Mastercard" className="h-6" />
+            <img src="/gpay.png" alt="GPay" className="h-6" />
+            <img src="/paytm.png" alt="Paytm" className="h-6" />
+            <span className="text-xs font-bold">CASH ON DELIVERY</span>
           </div>
         </div>
       </div>

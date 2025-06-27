@@ -2,7 +2,7 @@ import React from "react";
 import Product from "../components/Products";
 const Shop = () => {
   return (
-    <div>
+    <div className="py-10">
       <Product />
     </div>
   );

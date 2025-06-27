@@ -1,35 +1,29 @@
 import { products } from "../product/productList";
 import ProductAction from "./ProductActions";
 import { useState } from "react";
-import Buycard from "./Buycard";
+import { useNavigate } from "react-router-dom";
 
 const Products = () => {
   const [isHovered, setIsHovered] = useState(null);
-  const [isClicked, setIsClicked] = useState(false);
+  const navigate = useNavigate();
 
-  function productClick(product) {
-    setIsClicked(product);
-  }
-
-  if (isClicked) {
-    return <Buycard isClicked={isClicked} />;
-  }
+  const handleProductClick = (productId) => {
+    navigate(`/buycard/${productId}`); // 👈 Go to single product page
+  };
 
   return (
-    <section className="px-4 py-10">
+    <section className="px-4 ">
       <div className="flex flex-col">
-        <h2 className="text-3xl font-bold text-center mb-10">Our Products</h2>
-
         <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-2 gap-6 w-full max-w-screen pb-15">
           {products.map((product) => (
             <div
-              onClick={() => productClick(product)}
+              onClick={() => handleProductClick(product.id)}
               onMouseEnter={() => setIsHovered(product.id)}
               onMouseLeave={() => setIsHovered(null)}
               key={product.id}
-              className="bg-white p-4 rounded-xl shadow-md flex flex-col items-center transition-transform hover:scale-105 relative"
+              className="bg-white p-4 rounded-xl shadow-md flex flex-col items-center transition-transform hover:scale-105 relative cursor-pointer"
             >
-              <div>{isHovered === product.id ? <ProductAction /> : ""}</div>
+              <div>{isHovered === product.id && <ProductAction />}</div>
 
               <div className="w-full mb-3">
                 <img
@@ -38,12 +32,20 @@ const Products = () => {
                   className="h-48 w-full object-cover rounded-lg"
                 />
               </div>
-              <h2 className="text-lg font-semibold text-center">{product.name}</h2>
+              <h2 className="text-lg font-semibold text-center">
+                {product.name}
+              </h2>
               <span className="flex gap-2.5 py-1">
-                <p className="text-sm text-gray-500 line-through">₹{product.originalPrice}</p>
-                <p className="text-red-600 font-bold">₹{product.discountedPrice}</p>
+                <p className="text-sm text-gray-500 line-through">
+                  ₹{product.originalPrice}
+                </p>
+                <p className="text-red-600 font-bold">
+                  ₹{product.discountedPrice}
+                </p>
               </span>
-              <p className="text-yellow-500 text-sm">{"⭐".repeat(product.rating)}</p>
+              <p className="text-yellow-500 text-sm">
+                {"⭐".repeat(product.rating)}
+              </p>
 
               <span className="absolute top-5 left-5 bg-red-500 rounded-full h-15 w-15 flex items-center justify-center">
                 <p className="text-white text-center text-sm font-bold">

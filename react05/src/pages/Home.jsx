@@ -15,6 +15,7 @@ const Home = () => {
 
       {/*productlisting*/}
       <section className="mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-10 pt-10">Our Products</h2>
         <Products />
       </section>
 
