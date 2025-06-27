@@ -7,12 +7,14 @@ const Products = () => {
   const [isHovered, setIsHovered] = useState(null);
   const navigate = useNavigate();
 
+  
+
   const handleProductClick = (productId) => {
     navigate(`/buycard/${productId}`); // 👈 Go to single product page
   };
 
   return (
-    <section className="px-4 ">
+    <section className="px-4">
       <div className="flex flex-col">
         <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-2 gap-6 w-full max-w-screen pb-15">
           {products.map((product) => (
@@ -23,7 +25,9 @@ const Products = () => {
               key={product.id}
               className="bg-white p-4 rounded-xl shadow-md flex flex-col items-center transition-transform hover:scale-105 relative cursor-pointer"
             >
-              <div>{isHovered === product.id && <ProductAction />}</div>
+              <div onClick={(e) => e.stopPropagation()}>
+                {isHovered === product.id && <ProductAction product={product} />}
+              </div>
 
               <div className="w-full mb-3">
                 <img

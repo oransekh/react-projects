@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { products } from "../product/productList";
+import NotFound from "./NotFound";
 
 const Buycard = () => {
   const { id } = useParams();
@@ -13,8 +14,7 @@ const Buycard = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  if (!product)
-    return <p className="text-center text-red-600">Product not found.</p>;
+  // if (!product) return <NotFound />;
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">

@@ -1,7 +1,9 @@
 import React from "react";
 import { FaBars, FaHeart, FaShoppingBag, FaUser } from "react-icons/fa";
-
+import { useNavigate } from "react-router-dom";
 const BottomNav = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="fixed bottom-0 left-0 w-full bg-white shadow-md border-t flex justify-around py-3 z-50 lg:hidden">
       {/* Menu */}
@@ -11,7 +13,10 @@ const BottomNav = () => {
       </div>
 
       {/* Wishlist */}
-      <div className="relative flex flex-col items-center text-sm text-gray-700 cursor-pointer">
+      <div
+        onClick={() => navigate("/wishlist")}
+        className="relative flex flex-col items-center text-sm text-gray-700 cursor-pointer z-50"
+      >
         <FaHeart className="text-xl" />
         <span>Wishlist</span>
         <span className="absolute -top-1 right-2 bg-pink-600 text-white text-[10px] px-1 rounded-full">
