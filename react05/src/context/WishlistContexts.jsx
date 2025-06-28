@@ -1,4 +1,3 @@
-// WishlistContexts.jsx
 import React, { createContext, useContext, useState } from "react";
 
 const WishlistContext = createContext();
@@ -6,16 +5,28 @@ const WishlistContext = createContext();
 export const WishlistProvider = ({ children }) => {
   const [wishlist, setWishlist] = useState([]);
 
-  const addToWishlist = (product) => {
-    setWishlist((prev) => [...prev, product]);
+  const toggleWishlist = (product) => {
+    setWishlist((prev) => {
+      const exists = prev.some((item) => item.id === product.id);
+      if (exists) {
+        return prev.filter((item) => item.id !== product.id);
+      } else {
+        return [...prev, product];
+      }
+    });
+  };
+
+  const isInWishlist = (product) => {
+    return wishlist.some((item) => item.id === product.id);
   };
 
   return (
-    <WishlistContext.Provider value={{ wishlist, addToWishlist }}>
+    <WishlistContext.Provider
+      value={{ wishlist, toggleWishlist, isInWishlist }}
+    >
       {children}
     </WishlistContext.Provider>
   );
 };
 
-// ✅ This is the missing export
 export const useWishlist = () => useContext(WishlistContext);

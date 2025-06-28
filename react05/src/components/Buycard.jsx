@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { products } from "../product/productList";
-import NotFound from "./NotFound";
+import { useWishlist } from "../context/WishlistContexts";
 
 const Buycard = () => {
   const { id } = useParams();
   const product = products.find((p) => p.id === parseInt(id));
+  const navigate = useNavigate();
 
   const [selectedImage, setSelectedImage] = useState(product?.img);
   const [quantity, setQuantity] = useState(1);
+
+  const { wishlist, toggleWishlist } = useWishlist();
+  const isInWishlist = wishlist.some((item) => item.id === product.id);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -43,9 +47,9 @@ const Buycard = () => {
         {/* Responsive Thumbnails Overlay */}
         <div
           className="absolute -bottom-4 sm:-bottom-10 left-1/2 transform -translate-x-1/2 
-                lg:bottom-auto lg:top-1/2 lg:left-4 lg:-translate-y-1/2 
-                flex items-center justify-center lg:items-start lg:flex-col 
-                gap-3  p-2 rounded-md shadow-md"
+          lg:bottom-auto lg:top-1/2 lg:left-4 lg:-translate-y-1/2 
+          flex items-center justify-center lg:items-start lg:flex-col 
+          gap-3 p-2 rounded-md shadow-md"
         >
           {(product.thumbnails || [product.img]).map((thumb, i) => (
             <img
@@ -112,7 +116,12 @@ const Buycard = () => {
         {/* Compare / Wishlist */}
         <div className="flex gap-6 text-sm text-gray-600 mt-2">
           <span className="cursor-pointer">↔ Add to compare</span>
-          <span className="cursor-pointer">♡ Add to wishlist</span>
+          <span
+            onClick={() => toggleWishlist(product)}
+            className="cursor-pointer transition-colors duration-300 hover:text-pink-600"
+          >
+            {isInWishlist ? "❤️ Remove from Wishlist" : "♡ Add to Wishlist"}
+          </span>
         </div>
 
         {/* Payment Methods */}
