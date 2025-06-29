@@ -6,12 +6,12 @@ import { useWishlist } from "../context/WishlistContexts";
 const Buycard = () => {
   const { id } = useParams();
   const product = products.find((p) => p.id === parseInt(id));
-  const navigate = useNavigate();
 
   const [selectedImage, setSelectedImage] = useState(product?.img);
   const [quantity, setQuantity] = useState(1);
 
-  const { wishlist, toggleWishlist } = useWishlist();
+  const { wishlist, toggleWishlist, addToCart } = useWishlist(); // ✅ fixed line
+
   const isInWishlist = wishlist.some((item) => item.id === product.id);
 
   useEffect(() => {
@@ -105,7 +105,10 @@ const Buycard = () => {
             </button>
           </div>
 
-          <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-md font-semibold">
+          <button
+            onClick={() => addToCart({ ...product, quantity })}
+            className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-md font-semibold"
+          >
             Add To Cart
           </button>
           <button className="bg-pink-600 hover:bg-pink-700 text-white px-5 py-2 rounded-md font-semibold">

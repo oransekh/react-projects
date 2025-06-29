@@ -5,11 +5,13 @@ import { useWishlist } from "../context/WishlistContexts";
 const ProductActions = ({ product }) => {
   const [hovered, setHovered] = useState(null);
   const { toggleWishlist, wishlist } = useWishlist();
-
+  
   const handleToggleWishlist = (e) => {
     e.stopPropagation();
     toggleWishlist(product);
   };
+
+ 
 
   const isInWishlist = wishlist.some((item) => item.id === product.id);
 
@@ -62,7 +64,11 @@ const ProductActions = ({ product }) => {
       >
         <FaHeart />
         {hovered === "wishlist" && (
-          <span className="absolute -left-28 top-1/2 transform -translate-y-1/2 bg-black text-white text-xs px-2 py-1 rounded shadow z-50">
+          <span
+            className={`absolute top-1/2 transform -translate-y-1/2 bg-black text-white text-xs px-2 py-1 rounded shadow z-50 ${
+              isInWishlist ? "-left-36" : "-left-27"
+            }`}
+          >
             {isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
           </span>
         )}

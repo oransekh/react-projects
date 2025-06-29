@@ -13,7 +13,8 @@ import Footer from "./components/Footer";
 import NotFound from "./components/NotFound";
 import User from "./pages/User";
 import Wishlist from "./pages/Wishlist";
-import { WishlistProvider } from "./context/WishlistContexts"; // ✅ renamed
+import { WishlistProvider } from "./context/WishlistContexts";
+import UserDashboardContent from "./pages/UserDashboardContent";
 
 const Layout = () => (
   <div>
@@ -36,7 +37,11 @@ const router = createBrowserRouter([
       { path: "myaccount", element: <Myaccount /> },
       { path: "contactus", element: <Contact /> },
       { path: "buycard/:id", element: <Buycard /> },
-      { path: "user", element: <User /> },
+      {
+        path: "user",
+        element: <User />,
+        children: [{ path: "dashboard", element: <UserDashboardContent /> }],
+      },
       { path: "wishlist", element: <Wishlist /> },
       { path: "*", element: <NotFound /> },
     ],
@@ -45,7 +50,7 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-   <WishlistProvider>
+    <WishlistProvider>
       <RouterProvider router={router} />
     </WishlistProvider>
   );
